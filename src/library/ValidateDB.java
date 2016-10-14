@@ -134,4 +134,22 @@ public class ValidateDB {
         }
         return isExist;
     }
+    
+    public boolean socmt_exist(String socmt){
+        boolean isExist = false;
+        int count = 0;
+        Connection conn = new LibraryConnectDb().getConnectMySQL();
+        try {
+            PreparedStatement pst = conn.prepareStatement("SELECT COUNT(*) AS CHECKA FROM khachhang WHERE socmt = ?");
+            pst.setString(1, socmt);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                count = rs.getInt("CHECKA");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ValidateDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        isExist = ((count > 0)?true:false);
+        return isExist;
+    }
 }

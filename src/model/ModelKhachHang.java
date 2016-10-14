@@ -60,7 +60,7 @@ public class ModelKhachHang {
      public KhachHang getItem(int cid) {
         conn = lcdb.getConnectMySQL();
         KhachHang c = null;
-        String sql = "SELECT * FROM customer WHERE makh = ? LIMIT 1";
+        String sql = "SELECT * FROM khachhang WHERE makh = ? LIMIT 1";
         try {
             pst = conn.prepareStatement(sql);
             pst.setInt(1, cid);
@@ -83,7 +83,7 @@ public class ModelKhachHang {
         int result = 0;
         conn = lcdb.getConnectMySQL();
 
-        String sql = "INSERT INTO khachhang(tenkhachhang,gioitinh,ngaysinh,socmt,email,diachi,nghenghiep,sodienthoai,quoctich,matv) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO khachhang(tenkhachhang,gioitinh,ngaysinh,socmt,email,diachi,nghenghiep,sodienthoai,quoctich,matv) VALUES (?,?,?,?,?,?,?,?,?,?)";
         try {
             pst = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, item.getTenKhachHang());
@@ -127,6 +127,7 @@ public class ModelKhachHang {
             pst.setString(8, c.getSoDienThoai());
             pst.setString(9, c.getQuocTich());
             pst.setInt(10, c.getMaTV());
+            pst.setInt(11, c.getMaKH());
             pst.executeUpdate();
             result = c.getMaKH();
         } catch (SQLException e) {

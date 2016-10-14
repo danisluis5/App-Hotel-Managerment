@@ -9,6 +9,7 @@ import bean.LoaiThanhVien;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
+import model.ModelLoaiPhong;
 import model.ModelLoaiThanhVien;
 
 /**
@@ -28,6 +29,22 @@ public class LoaiThanhVienComboboxModel implements ComboBoxModel<LoaiThanhVien>{
             selectedItem = alItems.get(0);
         }else{
             selectedItem = obj;
+        }
+    }
+    
+    public LoaiThanhVienComboboxModel(){
+        model = new ModelLoaiThanhVien();
+        alItems = model.getList();
+        selectedItem = alItems.get(0);
+    }
+    
+    public LoaiThanhVienComboboxModel(String loaiThanhVien){
+        model = new ModelLoaiThanhVien();
+        alItems = model.getList();
+        for(int i = 0; i < alItems.size(); i++){
+            if(alItems.get(i).getTenThanhVien().equals(loaiThanhVien)){
+                selectedItem = alItems.get(i);
+            }
         }
     }
     
