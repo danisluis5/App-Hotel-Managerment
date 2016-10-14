@@ -115,9 +115,9 @@ public class ControllerDichVu extends AbstractTableModel{
         return result;
     }
 
-    public int deleteItem(DichVu obj, int row) {
+    public int delItem(int id, int row) {
         // xóa trong database
-        int result = model.delItem(obj.getMaDV());
+        int result = model.delItem(id);
         // xóa trong model
         int rowmodel = table.convertRowIndexToModel(row);
         alItem.remove(rowmodel);

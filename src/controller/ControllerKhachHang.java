@@ -6,10 +6,8 @@
 package controller;
 
 import bean.KhachHang;
-import bean.Room;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JTable;
@@ -150,9 +148,9 @@ public class ControllerKhachHang extends AbstractTableModel{
         return result;
     }
 
-    public int deleteItem(Room obj, int row) {
+    public int delItem(int id, int row) {
         // xóa trong database
-        int result = model.delItem(obj.getMaP());
+        int result = model.delItem(id);
         // xóa trong model
         int rowmodel = table.convertRowIndexToModel(row);
         alItem.remove(rowmodel);

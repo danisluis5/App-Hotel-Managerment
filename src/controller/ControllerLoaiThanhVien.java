@@ -107,9 +107,9 @@ public class ControllerLoaiThanhVien extends AbstractTableModel{
         return result;
     }
 
-    public int deleteItem(LoaiThanhVien obj, int row) {
+    public int delItem(int id, int row) {
         // xóa trong database
-        int result = model.delItem(obj.getMatv());
+        int result = model.delItem(id);
         // xóa trong model
         int rowmodel = table.convertRowIndexToModel(row);
         alItem.remove(rowmodel);

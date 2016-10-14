@@ -10,6 +10,7 @@ import bean.KhachHang;
 import bean.LoaiThanhVien;
 import controller.ControllerKhachHang;
 import controller.ControllerLoaiThanhVien;
+import java.awt.BorderLayout;
 import java.sql.Timestamp;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -516,40 +517,70 @@ public class PnUser extends javax.swing.JPanel {
             String email = tfEmail.getText();
             String soDienThoai = tfSoDienThoai.getText();
             LoaiThanhVien loaiThanhVien = new LoaiThanhVienComboboxModel().getElementAt(cbLoaiThanhVien.getSelectedIndex());
-            String diaChi = tfDiaChi.getText();
-            
-            System.out.println("Họ và tên: "+hoTen);
-            System.out.println("Giới tính: "+gioiTinh);
-            System.out.println("Ngày sinh: "+ngaySinh);
-            System.out.println("Số Chứng Minh Nhân Dân: "+scmt);
-            System.out.println("Email: "+email);
-            System.out.println("Địa chỉ: "+diaChi);
-            System.out.println("Nghề nghiệp: "+ngheNghiep);
-            System.out.println("Số điện thoại: "+soDienThoai);
-            System.out.println("Quốc tịch: "+quocTich);
-            System.out.println("Loại thành viên: "+loaiThanhVien.getMatv());
+            String diaChi = tfDiaChi.getText();            
             
             KhachHang obj = new KhachHang(0, hoTen, gioiTinh, ngaySinh, scmt, email, diaChi, ngheNghiep, soDienThoai, quocTich, loaiThanhVien.getMatv());
             if(isValid(obj, "add")){
                 if(!new ValidateDB().socmt_exist(String.valueOf(obj.getSoCMT()))){
                     int result = controller.addItem(obj);
                     if(result > 0){
-                        JOptionPane.showConfirmDialog(new PnRoom(), "<html><p style=\"color:blue; font-weight:bold;\">Thêm khách hàng thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
                         this.resetForm();
+                        JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:blue; font-weight:bold;\">Thêm khách hàng thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
                     }else{
-                        JOptionPane.showConfirmDialog(new PnRoom(), "<html><p style=\"color:red; font-weight:bold;\">Thêm khách hàng thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Thêm khách hàng thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
                     }
                 }else{
-                    JOptionPane.showConfirmDialog(new PnRoom(), "<html><p style=\"color:red; font-weight:bold;\">Khách hàng tồn tại trong hệ thống!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Khách hàng tồn tại trong hệ thống!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
                 }
             }
         }catch(NumberFormatException ex){
-            JOptionPane.showConfirmDialog(new PnRoom(), "<html><p style=\"color:red; font-weight:bold;\">Vui lòng nhập thông tin vào trường!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Vui lòng nhập thông tin vào trường!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btThemActionPerformed
 
     private void btSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSuaActionPerformed
         // TODO add your handling code here:
+        int row = tbMain.getSelectedRow();
+        if(row >= 0){
+            try{
+                int id = Integer.parseInt(tfID.getText());
+                String hoTen = tfKhachHang.getText();
+                String gioiTinh = new ButtonGroupGT().getText(btnGioiTinh);
+
+                Date utilDate = new JChooserDateToDate().getTime(tfNgaySinh.getDate());
+                java.sql.Timestamp ngaySinh = new java.sql.Timestamp(utilDate.getTime());
+
+                String quocTich = (String) new QuocTichComboboxModel().getElementAt(cbQuocTich.getSelectedIndex());        
+                String scmt = new ModelKhachHang().getItem(id).getSoCMT();
+                String ngheNghiep = tfNgheNghiep.getText();
+                
+                String email = tfEmail.getText();
+                String soDienThoai = new ModelKhachHang().getItem(id).getSoDienThoai();
+                
+                LoaiThanhVien loaiThanhVien = new LoaiThanhVienComboboxModel().getElementAt(cbLoaiThanhVien.getSelectedIndex());
+                String diaChi = tfDiaChi.getText();
+                
+                KhachHang obj = new KhachHang(id, hoTen, gioiTinh, ngaySinh, scmt, email, diaChi, ngheNghiep, soDienThoai, quocTich, loaiThanhVien.getMatv());
+                
+                if(isValid(obj, "edit")){
+                    if(!new ValidateDB().socmt_existver(obj.getSoCMT(),id)){
+                        int result = controller.editItem(obj,row);
+                        if(result > 0){
+                            this.resetForm();
+                            JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:blue; font-weight:bold;\">Cập nhật khách hàng thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                        }else{
+                            JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Cập nhật khách hàng thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Khách hàng tồn tại trong hệ thống!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }catch(NumberFormatException ex){
+                JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Vui lòng nhập thông tin vào trường trống!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showConfirmDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Bạn chưa chọn dòng để cập nhật!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btSuaActionPerformed
 
     private void btNhapLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNhapLaiActionPerformed
@@ -559,6 +590,19 @@ public class PnUser extends javax.swing.JPanel {
 
     private void btXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btXoaActionPerformed
         // TODO add your handling code here:
+        int row = tbMain.getSelectedRow();
+        if(row >= 0){
+            // When i delete new from table, way to good to delete get id from textfield
+            int id = Integer.parseInt(tfID.getText());
+            if(controller.delItem(id,row)>0){
+                this.resetForm();
+                JOptionPane.showMessageDialog(new PnUser(), "<html><p style=\"color:blue; font-weight:bold;\">Xóa khách hàng thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Xóa khách hàng thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(new PnUser(), "<html><p style=\"color:red; font-weight:bold;\">Bạn chưa chọn dòng để xóa!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btXoaActionPerformed
 
 

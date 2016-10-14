@@ -5,7 +5,10 @@
  */
 package view;
 
+import bean.DichVu;
 import controller.ControllerDichVu;
+import javax.swing.JOptionPane;
+import library.ValidateDB;
 
 /**
  *
@@ -42,7 +45,7 @@ public class PnService extends javax.swing.JPanel {
         tfID = new javax.swing.JTextField();
         tfDichVu = new javax.swing.JTextField();
         tfDonGia = new javax.swing.JTextField();
-        tfSoLuong = new javax.swing.JSpinner();
+        spSoLuong = new javax.swing.JSpinner();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
@@ -78,7 +81,7 @@ public class PnService extends javax.swing.JPanel {
         jLabel3.setText("Đơn giá:");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setText("Số lương:");
+        jLabel4.setText("Số lượng:");
 
         tfID.setEditable(false);
         tfID.setPreferredSize(new java.awt.Dimension(59, 24));
@@ -87,8 +90,8 @@ public class PnService extends javax.swing.JPanel {
 
         tfDonGia.setPreferredSize(new java.awt.Dimension(59, 24));
 
-        tfSoLuong.setModel(new javax.swing.SpinnerNumberModel());
-        tfSoLuong.setPreferredSize(new java.awt.Dimension(29, 24));
+        spSoLuong.setModel(new javax.swing.SpinnerNumberModel());
+        spSoLuong.setPreferredSize(new java.awt.Dimension(29, 24));
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "Tìm kiếm", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12), new java.awt.Color(0, 102, 255))); // NOI18N
 
@@ -185,7 +188,7 @@ public class PnService extends javax.swing.JPanel {
                         .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfDonGia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfSoLuong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(spSoLuong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -216,7 +219,7 @@ public class PnService extends javax.swing.JPanel {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(tfSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -244,6 +247,16 @@ public class PnService extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbMain.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbMainMousePressed(evt);
+            }
+        });
+        tbMain.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbMainKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbMain);
 
         jPanel4.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -257,20 +270,91 @@ public class PnService extends javax.swing.JPanel {
 
     private void btThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btThemActionPerformed
         // TODO add your handling code here:
+        try{
+            String tenDichVu = tfDichVu.getText();
+            int soPhong = (int) spSoLuong.getValue();
+            int donGia = Integer.parseInt(tfDonGia.getText());
+            DichVu obj = new DichVu(0, tenDichVu, soPhong, donGia);
+            if(isValid(obj, "add")){
+                if(!new ValidateDB().dichvu_exist(obj.getTenDichVu())){
+                    int result = controller.addItem(obj);
+                    if(result > 0){
+                        this.resetForm();
+                        JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:blue; font-weight:bold;\">Thêm Dịch vụ thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    }else{
+                        JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Thêm Dịch vụ thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Dịch vụ đã tồn tại trong hệ thống!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }catch(NumberFormatException ex){
+            JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Vui lòng nhập giá trị bằng số!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btThemActionPerformed
 
     private void btSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSuaActionPerformed
         // TODO add your handling code here:
+        int row = tbMain.getSelectedRow();
+        if(row >= 0){
+            try{
+                int id = Integer.parseInt(tfID.getText());
+                String tenDichVu = tfDichVu.getText();
+                int soPhong = (int) spSoLuong.getValue();
+                int donGia = Integer.parseInt(tfDonGia.getText());
+                DichVu obj = new DichVu(id, tenDichVu, soPhong, donGia);
+                if(isValid(obj, "edit")){
+                    if(!new ValidateDB().dichvu_existver(obj.getTenDichVu(),id)){
+                        int result = controller.editItem(obj,row);
+                        if(result > 0){
+                            this.resetForm();
+                            JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:blue; font-weight:bold;\">Cập nhật dịch vụ thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                        }else{
+                            JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Cập nhật dịch vụ thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Dịch vụ đã tồn tại trong hệ thống!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }catch(NumberFormatException ex){
+                JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Vui lòng nhập giá trị bằng số!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Bạn chưa chọn dòng để cập nhật!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btSuaActionPerformed
 
     private void btNhapLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNhapLaiActionPerformed
         // TODO add your handling code here:
+        this.resetForm();
     }//GEN-LAST:event_btNhapLaiActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-        
+        int row = tbMain.getSelectedRow();
+        if(row >= 0){
+            // When i delete new from table, way to good to delete get id from textfield
+            int id = Integer.parseInt(tfID.getText());
+            if(controller.delItem(id,row)>0){
+                JOptionPane.showMessageDialog(new PnRoom(), "<html><p style=\"color:blue; font-weight:bold;\">Xóa dịch vụ thành công!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(new PnRoom(), "<html><p style=\"color:red; font-weight:bold;\">Xóa dịch vụ thất bại!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(new PnRoom(), "<html><p style=\"color:red; font-weight:bold;\">Bạn chưa chọn dòng để xóa!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+        }
+        this.resetForm();
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void tbMainKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbMainKeyReleased
+        // TODO add your handling code here:
+        this.setForm();
+    }//GEN-LAST:event_tbMainKeyReleased
+
+    private void tbMainMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMainMousePressed
+        // TODO add your handling code here:
+        this.setForm();
+    }//GEN-LAST:event_tbMainMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -294,10 +378,49 @@ public class PnService extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JSpinner spSoLuong;
     private javax.swing.JTable tbMain;
     private javax.swing.JTextField tfDichVu;
     private javax.swing.JTextField tfDonGia;
     private javax.swing.JTextField tfID;
-    private javax.swing.JSpinner tfSoLuong;
     // End of variables declaration//GEN-END:variables
+
+    private void setForm() {
+        int row = tbMain.getSelectedRow();
+        int id = Integer.parseInt(tbMain.getValueAt(row, 0).toString());
+        String tenDichVu = tbMain.getValueAt(row, 1).toString();
+        int soLuong = Integer.parseInt(tbMain.getValueAt(row, 2).toString());
+        int donGia = Integer.parseInt(tbMain.getValueAt(row, 3).toString());
+        
+        
+        tfID.setText(String.valueOf(id));
+        tfDichVu.setText(tenDichVu);
+        tfDonGia.setText(String.valueOf(donGia));
+        spSoLuong.setValue(soLuong);
+    }
+
+    private void resetForm() {
+        tfID.setText("");
+        tfDichVu.setText("");
+        tfDonGia.setText("");
+        spSoLuong.setValue(0);
+    }
+    
+    private boolean isValid(DichVu obj, String function) {
+        boolean result = true;
+        boolean cont = true;
+        switch(function){
+            case "add":
+                break;
+            case "edit":
+                break;
+            case "del":
+                if(obj.getMaDV()<0){
+                    JOptionPane.showConfirmDialog(new PnService(), "<html><p style=\"color:red; font-weight:bold;\">Vui lòng chọn dòng để xóa!</p></html>","Thông báo",JOptionPane.WARNING_MESSAGE);
+                    result = false;
+                }
+                break;
+        }
+        return result;
+    }
 }

@@ -115,8 +115,9 @@ public class ModelKhachHang {
     public int editItem(KhachHang c) {
         int result = 0;
         conn = lcdb.getConnectMySQL();
-        String sql = "UPDATE khachhang SET tenkhachhang=?,gioitinh = ?,ngaysinh = ?,socmt = ?,email = ?,diachi = ?,nghenghiep = ?,sodienthoai = ?,quoctich = ?,matv = ? WHERE makh=? LIMIT 1";
+        String sql = "UPDATE khachhang SET tenkhachhang = ?,gioitinh = ?,ngaysinh = ?,socmt = ?,email = ?,diachi = ?,nghenghiep = ?,sodienthoai = ?,quoctich = ?,matv = ? WHERE makh = ? LIMIT 1";
         try {
+            pst = conn.prepareStatement(sql);
             pst.setString(1, c.getTenKhachHang());
             pst.setString(2, c.getGioiTinh());
             pst.setTimestamp(3, c.getNgaySinh());
@@ -133,7 +134,7 @@ public class ModelKhachHang {
         } catch (SQLException e) {
         } finally {
             try {
-                pst.close();
+//                pst.close();
                 conn.close();
             } catch (SQLException e) {
             }
