@@ -11,10 +11,14 @@ import bean.TypeRoom;
 import controller.ControllerLoaiPhong;
 import controller.ControllerRoom;
 import controller.ControllerTang;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale.Category;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 import library.ValidateDB;
-import model.ModelLoaiPhong;
-import model.ModelTang;
 import render.LoaiPhongComboboxModel;
 import render.TangComboboxModel;
 import render.TinhTrangComboboxModel;
@@ -32,6 +36,8 @@ public class PnRoom extends javax.swing.JPanel {
     private ControllerRoom controller;
     private ControllerTang controllerTang;
     private ControllerLoaiPhong controllerLoaiPhong;
+    private TypeRoom objLoaiPhong;
+    private Floor objTang;
     
     public PnRoom() {
         initComponents();
@@ -48,6 +54,8 @@ public class PnRoom extends javax.swing.JPanel {
         this.cbTinhTrang.setModel(new TinhTrangComboboxModel());
         this.cbTrangThai.setModel(new TrangThaiComboboxModel());
         
+        this.cbTinhTrangF.setModel(new TinhTrangComboboxModel());
+        this.cbTrangThaiF.setModel(new TrangThaiComboboxModel());
     }
 
     /**
@@ -86,20 +94,20 @@ public class PnRoom extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        tfIDF = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        tfSoPhongF = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        cbTinhTrangF = new javax.swing.JComboBox<>();
+        cbTrangThaiF = new javax.swing.JComboBox<>();
         cbLoaiPhongF = new javax.swing.JComboBox();
         jLabel13 = new javax.swing.JLabel();
         cbTangF = new javax.swing.JComboBox();
         jPanel5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        TimKiemF = new javax.swing.JButton();
+        NhapLaiF = new javax.swing.JButton();
         closeF = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -286,14 +294,14 @@ public class PnRoom extends javax.swing.JPanel {
         jPanel4.setBackground(new java.awt.Color(242, 242, 242));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel8.setText("Mã phòng:");
+        jLabel8.setText("Mã Phòng:");
 
-        jTextField3.setPreferredSize(new java.awt.Dimension(59, 24));
+        tfIDF.setPreferredSize(new java.awt.Dimension(59, 24));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel9.setText("Số phòng:");
 
-        jTextField4.setPreferredSize(new java.awt.Dimension(59, 24));
+        tfSoPhongF.setPreferredSize(new java.awt.Dimension(59, 24));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel10.setText("Tình trạng:");
@@ -304,11 +312,11 @@ public class PnRoom extends javax.swing.JPanel {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel12.setText("Chọn loại phòng:");
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BÌNH THƯỜNG", "BẢO TRÌ" }));
-        jComboBox5.setPreferredSize(new java.awt.Dimension(56, 24));
+        cbTinhTrangF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BÌNH THƯỜNG", "BẢO TRÌ" }));
+        cbTinhTrangF.setPreferredSize(new java.awt.Dimension(56, 24));
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ĐÃ THUÊ ", "CHƯA THUÊ" }));
-        jComboBox6.setPreferredSize(new java.awt.Dimension(56, 24));
+        cbTrangThaiF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ĐÃ THUÊ ", "CHƯA THUÊ" }));
+        cbTrangThaiF.setPreferredSize(new java.awt.Dimension(56, 24));
 
         cbLoaiPhongF.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbLoaiPhongF.setPreferredSize(new java.awt.Dimension(56, 24));
@@ -332,14 +340,14 @@ public class PnRoom extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfIDF, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jLabel9)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                        .addComponent(tfSoPhongF, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox5, 0, 1, Short.MAX_VALUE)
+                            .addComponent(cbTinhTrangF, 0, 224, Short.MAX_VALUE)
                             .addComponent(cbLoaiPhongF, 0, 1, Short.MAX_VALUE))
                         .addGap(24, 24, 24)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,7 +356,7 @@ public class PnRoom extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbTangF, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(cbTrangThaiF, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(22, 22, 22))
         );
         jPanel4Layout.setVerticalGroup(
@@ -357,15 +365,15 @@ public class PnRoom extends javax.swing.JPanel {
                 .addGap(22, 22, 22)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfIDF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSoPhongF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel11)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbTinhTrangF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbTrangThaiF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
@@ -381,15 +389,25 @@ public class PnRoom extends javax.swing.JPanel {
         jPanel5.setBorder(javax.swing.BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(242, 242, 242)));
         jPanel5.setLayout(new java.awt.GridLayout(3, 1, 15, 15));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iSearch.png"))); // NOI18N
-        jButton1.setText("Tìm kiếm ");
-        jPanel5.add(jButton1);
+        TimKiemF.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        TimKiemF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iSearch.png"))); // NOI18N
+        TimKiemF.setText("Tìm kiếm ");
+        TimKiemF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TimKiemFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(TimKiemF);
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iReset.png"))); // NOI18N
-        jButton2.setText("Nhập lại");
-        jPanel5.add(jButton2);
+        NhapLaiF.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        NhapLaiF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iReset.png"))); // NOI18N
+        NhapLaiF.setText("Nhập lại");
+        NhapLaiF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NhapLaiFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(NhapLaiF);
 
         closeF.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         closeF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iClose.png"))); // NOI18N
@@ -541,10 +559,68 @@ public class PnRoom extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
+    private void NhapLaiFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NhapLaiFActionPerformed
+        // TODO add your handling code here:
+        tfIDF.setText("");
+        tfSoPhongF.setText("");
+        controllerTang.loadTang(this.cbTang, false, null);
+        controllerLoaiPhong.loadCategory(this.cbLoaiPhong, false, null);
+        this.cbTinhTrangF.setModel(new TinhTrangComboboxModel());
+        this.cbTrangThaiF.setModel(new TrangThaiComboboxModel());
+    }//GEN-LAST:event_NhapLaiFActionPerformed
+
+    private void TimKiemFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimKiemFActionPerformed
+        // TODO add your handling code here:
+        TableRowSorter sorter = new TableRowSorter(tbMain.getModel());
+        tbMain.setRowSorter(sorter);
+        
+        ArrayList<RowFilter<AbstractTableModel,Object>> alFilter = new ArrayList<>();
+        
+        String id = tfIDF.getText();
+        RowFilter<AbstractTableModel,Object> filterID = RowFilter.regexFilter(id, 0);
+        
+        String name = tfSoPhongF.getText();
+        RowFilter<AbstractTableModel,Object> filterName = RowFilter.regexFilter(name, 1);
+        
+        alFilter.add(filterID);
+        alFilter.add(filterName);
+        
+        objLoaiPhong = (TypeRoom) cbLoaiPhongF.getSelectedItem();
+        if(objLoaiPhong.getMaLP() != 0){
+            RowFilter<AbstractTableModel,Object> filterLoaiPhong = new RowFilter<AbstractTableModel, Object>() {
+                @Override
+                public boolean include(RowFilter.Entry<? extends AbstractTableModel, ? extends Object> entry) {
+                    // Cateogry objFindCat = (Category)entry.getValue(4) 
+                    String tenLoaiPhong = (String) entry.getValue(5);
+                    return objLoaiPhong.getTenPhong().equals(tenLoaiPhong);
+                }
+            };
+            alFilter.add(filterLoaiPhong);
+        }
+        
+        objTang = (Floor) cbTangF.getSelectedItem();
+        if(objTang.getMaT() != 0){
+            RowFilter<AbstractTableModel,Object> filterTang = new RowFilter<AbstractTableModel, Object>() {
+                @Override
+                public boolean include(RowFilter.Entry<? extends AbstractTableModel, ? extends Object> entry) {
+                    // Cateogry objFindCat = (Category)entry.getValue(4) 
+                    int tang = (int) entry.getValue(6);
+                    return (objTang.getTang() == tang);
+                }
+            };
+            alFilter.add(filterTang);
+        }
+
+        RowFilter<AbstractTableModel,Object> filterAnd = RowFilter.andFilter(alFilter);
+        sorter.setRowFilter(filterAnd);
+    }//GEN-LAST:event_TimKiemFActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LeftRoom;
+    private javax.swing.JButton NhapLaiF;
     private javax.swing.JPanel RightRoom;
+    private javax.swing.JButton TimKiemF;
     private javax.swing.JButton btnNhapLai;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
@@ -554,12 +630,10 @@ public class PnRoom extends javax.swing.JPanel {
     private javax.swing.JComboBox cbTang;
     private javax.swing.JComboBox cbTangF;
     private javax.swing.JComboBox cbTinhTrang;
+    private javax.swing.JComboBox<String> cbTinhTrangF;
     private javax.swing.JComboBox<String> cbTrangThai;
+    private javax.swing.JComboBox<String> cbTrangThaiF;
     private javax.swing.JButton closeF;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -582,12 +656,12 @@ public class PnRoom extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tbMain;
     private javax.swing.JTextArea tfGhiChu;
+    private javax.swing.JTextField tfIDF;
     private javax.swing.JTextField tfId;
     private javax.swing.JTextField tfSoPhong;
+    private javax.swing.JTextField tfSoPhongF;
     // End of variables declaration//GEN-END:variables
 
     private void setForm() {
@@ -611,6 +685,7 @@ public class PnRoom extends javax.swing.JPanel {
         tfGhiChu.setText("");
         controllerTang.loadTang(this.cbTang, false, null);
         controllerLoaiPhong.loadCategory(this.cbLoaiPhong, false, null);
+        controller.loadTable();
     }
 
     private boolean isValid(Room obj, String function) {
