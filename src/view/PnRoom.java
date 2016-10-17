@@ -230,7 +230,7 @@ public class PnRoom extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(LeftRoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(LeftRoomLayout.createSequentialGroup()
-                        .addComponent(tfId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tfId, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
                         .addGap(70, 70, 70))
                     .addComponent(tfSoPhong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cbTrangThai, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -312,10 +312,10 @@ public class PnRoom extends javax.swing.JPanel {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel12.setText("Chọn loại phòng:");
 
-        cbTinhTrangF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BÌNH THƯỜNG", "BẢO TRÌ" }));
+        cbTinhTrangF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", " " }));
         cbTinhTrangF.setPreferredSize(new java.awt.Dimension(56, 24));
 
-        cbTrangThaiF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ĐÃ THUÊ ", "CHƯA THUÊ" }));
+        cbTrangThaiF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", " " }));
         cbTrangThaiF.setPreferredSize(new java.awt.Dimension(56, 24));
 
         cbLoaiPhongF.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -347,7 +347,7 @@ public class PnRoom extends javax.swing.JPanel {
                         .addComponent(tfSoPhongF, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbTinhTrangF, 0, 224, Short.MAX_VALUE)
+                            .addComponent(cbTinhTrangF, 0, 84, Short.MAX_VALUE)
                             .addComponent(cbLoaiPhongF, 0, 1, Short.MAX_VALUE))
                         .addGap(24, 24, 24)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -567,6 +567,7 @@ public class PnRoom extends javax.swing.JPanel {
         controllerLoaiPhong.loadCategory(this.cbLoaiPhong, false, null);
         this.cbTinhTrangF.setModel(new TinhTrangComboboxModel());
         this.cbTrangThaiF.setModel(new TrangThaiComboboxModel());
+        controller.loadTable();
     }//GEN-LAST:event_NhapLaiFActionPerformed
 
     private void TimKiemFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimKiemFActionPerformed
@@ -579,11 +580,33 @@ public class PnRoom extends javax.swing.JPanel {
         String id = tfIDF.getText();
         RowFilter<AbstractTableModel,Object> filterID = RowFilter.regexFilter(id, 0);
         
-        String name = tfSoPhongF.getText();
-        RowFilter<AbstractTableModel,Object> filterName = RowFilter.regexFilter(name, 1);
+        String soPhong = tfSoPhongF.getText();
+        RowFilter<AbstractTableModel,Object> filterName = RowFilter.regexFilter(soPhong, 1);
         
         alFilter.add(filterID);
-        alFilter.add(filterName);
+        alFilter.add(filterName); 
+        
+        String trangThai = (String) new TrangThaiComboboxModel().getElementAt(cbTrangThaiF.getSelectedIndex());
+        if(!trangThai.isEmpty()){
+            RowFilter<AbstractTableModel,Object> filterTT = new RowFilter<AbstractTableModel, Object>() {
+                @Override
+                public boolean include(RowFilter.Entry<? extends AbstractTableModel, ? extends Object> entry) {
+                    return trangThai.equals(String.valueOf(entry.getValue(3)));
+                }
+            };
+            alFilter.add(filterTT);
+        }
+        
+        String tinhTrang = (String) new TinhTrangComboboxModel().getElementAt(cbTinhTrangF.getSelectedIndex());
+        if(!tinhTrang.isEmpty()){
+            RowFilter<AbstractTableModel,Object> filterTTV = new RowFilter<AbstractTableModel, Object>() {
+                @Override
+                public boolean include(RowFilter.Entry<? extends AbstractTableModel, ? extends Object> entry) {
+                    return tinhTrang.equals(String.valueOf(entry.getValue(2)));
+                }
+            };
+            alFilter.add(filterTTV);
+        }
         
         objLoaiPhong = (TypeRoom) cbLoaiPhongF.getSelectedItem();
         if(objLoaiPhong.getMaLP() != 0){
@@ -609,7 +632,7 @@ public class PnRoom extends javax.swing.JPanel {
                 }
             };
             alFilter.add(filterTang);
-        }
+        }        
 
         RowFilter<AbstractTableModel,Object> filterAnd = RowFilter.andFilter(alFilter);
         sorter.setRowFilter(filterAnd);
