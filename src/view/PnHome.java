@@ -21,7 +21,7 @@ import javax.swing.JPanel;
  */
 public class PnHome extends javax.swing.JPanel {
     
-    private int soPhong = 70;
+    private int soPhong = 125;
     /**
      * Creates new form pnService
      */
@@ -40,29 +40,15 @@ public class PnHome extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Center = new javax.swing.JPanel();
         First = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        scrollPane = new javax.swing.JScrollPane();
+        Center = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(242, 242, 242));
         setName("Home"); // NOI18N
         setLayout(new java.awt.BorderLayout());
-
-        Center.setBackground(new java.awt.Color(242, 242, 242));
-
-        javax.swing.GroupLayout CenterLayout = new javax.swing.GroupLayout(Center);
-        Center.setLayout(CenterLayout);
-        CenterLayout.setHorizontalGroup(
-            CenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
-        );
-        CenterLayout.setVerticalGroup(
-            CenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 137, Short.MAX_VALUE)
-        );
-
-        add(Center, java.awt.BorderLayout.CENTER);
 
         First.setBackground(new java.awt.Color(242, 242, 242));
 
@@ -80,7 +66,7 @@ public class PnHome extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(399, Short.MAX_VALUE))
+                .addContainerGap(342, Short.MAX_VALUE))
         );
         FirstLayout.setVerticalGroup(
             FirstLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,10 +79,21 @@ public class PnHome extends javax.swing.JPanel {
         );
 
         add(First, java.awt.BorderLayout.PAGE_START);
+
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setNextFocusableComponent(scrollPane);
+
+        Center.setBackground(new java.awt.Color(242, 242, 242));
+        Center.setAutoscrolls(true);
+        Center.setLayout(new java.awt.BorderLayout());
+        scrollPane.setViewportView(Center);
+
+        add(scrollPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void viewRoom(JPanel temp) {
-        for(int i = 0; i < soPhong; i++){
+        for(int i = 101; i < soPhong; i++){
             JButton btnRoom = new JButton();
             btnRoom.setFont(new Font("Tahoma",1,13));
             btnRoom.setForeground(new Color(51, 153, 0));
@@ -124,5 +121,6 @@ public class PnHome extends javax.swing.JPanel {
     private javax.swing.JPanel First;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 }
